@@ -263,6 +263,9 @@ as XML it would become:
 </result>
 ```
 
+#### Combining `unwrap_result` and the Accept Header
+
+The `unwrap_result` query param and the `Accept` header can be combined to have any plain text response that you would like. For example, if you would like to create an XML output that does not use the same rules as described above you could build this XML as a string in the snippet. If you pass the `unwrap_result` query param to the request and simultaneously specify application/xml or text/plain in the `Accept` header you will receive the exact XML string you output in your snippet. Note that if your snippet output is any non-object, non-array value and application/xml is specified in the `Accept` header, no transformation or validation will be done on the value. CloudMine assumes you are doing this purposefully and it is up to you to ensure the XML is valid.
 
 ### 4. Preparing the ZIP Package for CloudMine
 
