@@ -191,7 +191,50 @@ Output:
 }
 ```
 
-### 3. Preparing the ZIP Package for CloudMine
+### 3. Controling the Snippet Response
+
+There are options that can be used to control the response from the snippet beyond the `reply` interface.
+
+#### Using the `unwrap_result` query param
+
+By specifying `unwrap_result=true` in the query string of the snippet execution request, the output of the snippet will not be wrapped in a `result` attribute.
+
+Suppose you have a snippet that responds with `reply('I called a snippet!')`.
+
+With the default behavior the response payload would be:
+
+```
+{
+  "result": "I called a snippet!"
+}
+```
+
+By specifying `unwrap_result=true` in the query string of the snippet request the response payload will become:
+
+```
+I called a snippet!
+```
+
+#### Setting the Accept Header
+
+The `Accept` header can be used in the snippet execution request to change the `Content-Type` header of the response as well as the format of the payload. There are two supported values for the `Accept` header:
+1) text/plain
+2) application/xml
+
+If `text/plain` is used, the payload does not change as all json payloads are already delivered as text, but the Content-Type on the response will be set to `text/plain`
+
+If `application/xml` is used the payload will be converted to XML based on the rules below, and the Content-Type on the response will be set to `application/xml`
+
+Any other value in the `Accept` header will be ignored and the Content-Type on the response will be `application/json`
+
+##### JSON to XML Conversion Rules
+
+1) Object property names will become XML tags that wrap the value of that property
+2) Properties will values null, undefined, or empty string will be represented with an empty tag (e.g. `<Name/>`)
+3) Each element in an array will be wrapped in an `<element>` tag`
+
+
+### 4. Preparing the ZIP Package for CloudMine
 
 When uploading your ZIP package to CloudMine's servers, please be sure that:
 
