@@ -191,7 +191,7 @@ Output:
 }
 ```
 
-### 3. Controling the Snippet Response
+### 3. Controlling the Snippet Response
 
 There are options that can be used to control the response from the snippet beyond the `reply` interface.
 
