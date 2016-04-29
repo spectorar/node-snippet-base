@@ -199,9 +199,7 @@ There are options that can be used to control the response from the snippet beyo
 
 By specifying `unwrap_result=true` in the query string of the snippet execution request, the output of the snippet will not be wrapped in a `result` attribute.
 
-Suppose you have a snippet that responds with `reply('I called a snippet!')`.
-
-With the default behavior the response payload would be:
+Suppose you have a snippet that calls `reply('I called a snippet!')` to complete execution. With the default behavior the response payload would be:
 
 ```
 {
@@ -218,20 +216,52 @@ I called a snippet!
 #### Setting the Accept Header
 
 The `Accept` header can be used in the snippet execution request to change the `Content-Type` header of the response as well as the format of the payload. There are two supported values for the `Accept` header:
-1) text/plain
-2) application/xml
+1. text/plain
+2. application/xml
 
-If `text/plain` is used, the payload does not change as all json payloads are already delivered as text, but the Content-Type on the response will be set to `text/plain`
+If `text/plain` is used, the payload does not change as all json payloads are already delivered as text, but the `Content-Type` on the response will be set to `text/plain`.
 
-If `application/xml` is used the payload will be converted to XML based on the rules below, and the Content-Type on the response will be set to `application/xml`
+If `application/xml` is used the payload will be converted to XML based on the rules below, and the `Content-Type` on the response will be set to `application/xml`.
 
-Any other value in the `Accept` header will be ignored and the Content-Type on the response will be `application/json`
+Any other value in the `Accept` header will be ignored and the `Content-Type` on the response will be `application/json`.
 
 ##### JSON to XML Conversion Rules
 
-1) Object property names will become XML tags that wrap the value of that property
-2) Properties will values null, undefined, or empty string will be represented with an empty tag (e.g. `<Name/>`)
-3) Each element in an array will be wrapped in an `<element>` tag`
+1. Object property names will become XML tags that wrap the value of that property
+2. Properties will values null, undefined, or empty string will be represented with an empty tag (e.g. `<Name/>`)
+3. Each element in an array will be wrapped in an `<element>` tag
+
+##### JSON to XML Conversion Example
+
+If you would have received a JSON response such as:
+```
+{
+  result: {
+    str: "a string",
+    bool: true,
+    num: 1289,
+    arr: ['uno', 2, false],
+    empty: '',
+    undef: undefined
+  }
+}
+```
+as XML it would become:
+```
+<?xml version="1.0" encoding="UTF-8" ?>
+<result>
+  <str>a string</str>
+  <bool>true</bool>
+  <num>1289</num>
+  <arr>
+    <element>uno</element>
+    <element>2</element>
+    <element>false</element>
+  </arr>
+  <empty/>
+  <undef/>
+</result>
+```
 
 
 ### 4. Preparing the ZIP Package for CloudMine
